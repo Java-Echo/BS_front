@@ -1,7 +1,6 @@
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import {Component} from 'react';
-import {withRouter} from 'react-router-dom';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -12,7 +11,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
-
+import {useNavigate} from 'react-router-dom';
 const theme = createTheme();
 
 export default class LoginPage extends Component{
@@ -23,45 +22,42 @@ export default class LoginPage extends Component{
       password : '',
     }
   }
+  
   handleLogin = () => { 
-    
-    // axios.post('http://localhost:8080/login?id=',this.state.account,'&passwd=',this.state.password)
-    // .then(res =>{
-    //   // console.log('data:',res.data);
-    //   alert(res.data);
-      
-    //   console.log('id:',res.data.id,'passwd:',res.data.passwd);
-    //   alert('ddd');
-    //   if (res.data.id === 'null' && res.data.passwd === 'null'){
-    //     alert('账号不存在，请注册账号');
-    //     return;
-    //   } else if (res.data.passwd ===  'null'){
-    //     alert('密码错误');
-    //     return ;
-    //   } else{
-    //     // this.props.history.push('/mainPage');
-    //     alert('fw');
-    //     console.log("sccuses");
-    //   }
+    axios.post('http://localhost:8080/login?id='+this.state.account+'&passwd='+this.state.password)
+    .then(res =>{
+      alert('ddd');
+      if (res.data.id === 'null' && res.data.passwd === 'null'){
+        alert('账号不存在，请注册账号');
+        return;
+      } else if (res.data.passwd ===  'null'){
+        alert('密码错误');
+        return ;
+      } else{
+        // this.props.history.push('/mainPage');
+        alert('fw');
+        console.log("sccuses");
+      }
 
-    // })
-    // .catch(err =>{
-    //   console.log('err:',err);
-    //   alert(err);
-    // })
-    // if (this.state.account === 'admin' && this.state.password === '123456'){
-    //   alert('登录成功');
-    //   this.props.history.push('/mainRouter');
-    // }
+    })
+    .catch(err =>{
+      console.log('err:',err);
+      alert(err);
+    })
+    if (this.state.account === 'admin' && this.state.password === '123456'){
+      alert('登录成功');
+      // this.props.history.push('/mainRouter');
+    }
     console.log(this.props);
 
-    alert('登录成功');
-    this.props.history.push('/mainRouter');
-    alert('ddd');
+    // alert('登录成功');
+    // this.props.history.push('/mainRouter');
+    // alert('ddd');
 
   }
+  
   render(){
-  console.log(this.props);
+  console.log(this.props.history);
 
   return (
     <ThemeProvider theme={theme}>
@@ -137,3 +133,4 @@ export default class LoginPage extends Component{
   );
     }
 }
+

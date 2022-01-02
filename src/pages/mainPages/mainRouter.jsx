@@ -8,10 +8,11 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
+import ListItemButton from '@mui/material/ListItemButton';
 import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
-
 import InboxIcon from '@mui/icons-material/MoveToInbox';
+import TextField from '@mui/material/TextField';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MailIcon from '@mui/icons-material/Mail';
@@ -20,7 +21,9 @@ import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
 import Logout from '@mui/icons-material/Logout';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import BookIcon from '@mui/icons-material/Book';
-import { Link, Route, Routes } from 'react-router-dom';
+import { Link, Route, Routes, Navigate,Outlet, useNavigate} from 'react-router-dom';
+import EditPic from './imageEditor';
+import Avatar from '@mui/material/Avatar';
 // import MyLable from './myLable';
 // import ChangePwd from '/changePwd';
 // import UploadPic from './uploadPic';
@@ -31,7 +34,15 @@ const drawerWidth = 240;
 
 
 export default class MainRouter extends React.Component {
-    
+    state = {
+      show: 0 ,
+    }
+    test = () =>{
+      alert('test');
+      // this.props.history.push('/loginPage');
+      console.log(this.props.history);
+      this.props.navigation('/loginPage');
+    }
   render(){
     // const container = window !== undefined ? () => window().document.body : undefined;
     const drawer = (
@@ -39,46 +50,57 @@ export default class MainRouter extends React.Component {
         <Toolbar />
         <Divider />
         <List>
-          <ListItem button key="上传图片" >
+          <ListItem  >
+            <ListItemButton component="a">
             <ListItemIcon>
               <InsertPhotoIcon />
             </ListItemIcon>
-            <Link to="/uploadPic" />
             <ListItemText primary="上传图片" />
+            </ListItemButton>
           </ListItem>
-            <ListItem button key="上传视频">
+            <ListItem >
+              <ListItemButton component="a"  href="/mainRouter/uploadVideo">
             <ListItemIcon>
               <OndemandVideoIcon/>
             </ListItemIcon>
             <ListItemText primary="上传视频" />
+            </ListItemButton>
           </ListItem>
-            <ListItem button key="我的标注" >
+            <ListItem >
+              <ListItemButton component="a" onClick={this.test}>
             <ListItemIcon>
               <BookIcon />
             </ListItemIcon>
             <ListItemText primary="我的标注" />
+            </ListItemButton>
           </ListItem>
-            <ListItem button key="标注界面" >
+            <ListItem >
+              <ListItemButton component="a" href="/mainRouter/editPic">
             <ListItemIcon>
               <MailIcon />
             </ListItemIcon>
             <ListItemText primary="标注界面" />
+            </ListItemButton>
           </ListItem>
         </List>
         <Divider />
         <List>
           <ListItem button key="修改密码">
+           <ListItemButton component="a">
             <ListItemIcon>
               <ManageAccountsIcon />
             </ListItemIcon>
             <ListItemText primary="修改密码" />
+            </ListItemButton>
           </ListItem>
           <ListItem button key="退出登录" >
+            <ListItemButton component="a">
             <ListItemIcon>
               <Logout />
             </ListItemIcon>
             
             <ListItemText primary="退出登录" />
+            </ListItemButton>
           </ListItem>
         </List>
         
@@ -143,9 +165,9 @@ export default class MainRouter extends React.Component {
         sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
       >
         <Toolbar />
-        <Routes>
-            {/* <Route path= */}
-        </Routes>
+
+        <Outlet/>
+        
       </Box>
     </Box>
   );
