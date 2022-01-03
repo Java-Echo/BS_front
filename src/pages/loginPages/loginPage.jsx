@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
-import {Component} from 'react';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -12,53 +11,27 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
+
 const theme = createTheme();
 
-export default class LoginPage extends Component{
-  constructor(props){
-    super(props);
-    this.state = {
-      account : '',
-      password : '',
+export default function LoginPage(props){
+ 
+  const [account, setAccount] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const navigate = useNavigate();
+
+  async function handleLogin(){
+    const {data} = await axios.post('http://localhost:8080/login?id='+account+'&passwd='+password);
+    console.log(data);
+    if (data.id === 'null' && data.passwd === 'null'){
+      alert('账号不存在，请注册账号');
+    } else if (data.passwd ===  'null'){
+      alert('密码错误');
+    } else{
+      // alert('登录成功');
+      navigate('/mainRouter');
     }
   }
-  
-  handleLogin = () => { 
-    axios.post('http://localhost:8080/login?id='+this.state.account+'&passwd='+this.state.password)
-    .then(res =>{
-      alert('ddd');
-      if (res.data.id === 'null' && res.data.passwd === 'null'){
-        alert('账号不存在，请注册账号');
-        return;
-      } else if (res.data.passwd ===  'null'){
-        alert('密码错误');
-        return ;
-      } else{
-        // this.props.history.push('/mainPage');
-        alert('fw');
-        console.log("sccuses");
-      }
-
-    })
-    .catch(err =>{
-      console.log('err:',err);
-      alert(err);
-    })
-    if (this.state.account === 'admin' && this.state.password === '123456'){
-      alert('登录成功');
-      // this.props.history.push('/mainRouter');
-    }
-    console.log(this.props);
-
-    // alert('登录成功');
-    // this.props.history.push('/mainRouter');
-    // alert('ddd');
-
-  }
-  
-  render(){
-  console.log(this.props.history);
-
   return (
     <ThemeProvider theme={theme}>
       
@@ -77,7 +50,7 @@ export default class LoginPage extends Component{
           <Typography component="h1" variant="h5">
             登录
           </Typography>
-          <Box component="form"  noValidate sx={{ mt: 1 }}>
+          <Box component="div"  noValidate sx={{ mt: 1 }}>
 
             <TextField
               margin="normal"
@@ -88,24 +61,25 @@ export default class LoginPage extends Component{
               name="id"
               autoComplete="id"
               autoFocus
-              value={this.state.account}
+              // value={account}
               onChange={(e) => {
-                this.setState({account: e.target.value});
-                // console.log('account:',this.state.account);
+                setAccount(e.target.value);
+                // console.log(account); 
               }}    
             />
             <TextField
               margin="normal"
               required
               fullWidth
-              name="passwd"
+              name="password"
               label="密码"
-              type="passwd"
-              id="passwd"
+              type="password"
+              id="password"
               autoComplete="current-password"
-              value={this.state.password}
+              // value={password}
               onChange={(e) => {
-                this.setState({password: e.target.value});
+                // this.setState({password: e.target.value});
+                setPassword(e.target.value)
                 // console.log('passwd:',this.state.password);
             }} 
 
@@ -115,7 +89,7 @@ export default class LoginPage extends Component{
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              onClick={this.handleLogin}
+              onClick={handleLogin}
             >
               登录
             </Button>
@@ -132,5 +106,5 @@ export default class LoginPage extends Component{
     </ThemeProvider>
   );
     }
-}
+// }
 

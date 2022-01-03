@@ -11,21 +11,33 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
+import axios from 'axios';
+import {useNavigate} from 'react-router-dom';
 
 const theme = createTheme();
 
-export default class RegisterPage extends Component {
-  handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
-  render(){
+export default function RegisterPage() {
+  const [account, setAccount] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [name, setName] = React.useState('');
+  const navigate = useNavigate();
+
+  async function handleRegister(){
+    const {data} = await axios.post('http://localhost:8080/register?id='+account+'&passwd='+password+'&email='+email+'&name='+name);
+    console.log(data);
+    if(data.id === "null"){
+      alert('账号已存在');
+    }else if(data.id === "Short"){
+      alert('账号和密码至少为6位');
+    }else if(data.id === "Email wrong"){
+      alert('邮箱格式错误');
+    }else{
+      alert('注册成功');
+      navigate('/loginPage');
+    }
+  }
+  // render(){
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -44,7 +56,7 @@ export default class RegisterPage extends Component {
           <Typography component="h1" variant="h5">
             注册
           </Typography>
-          <Box component="form" noValidate onSubmit={this.handleSubmit} sx={{ mt: 3 }}>
+          <Box component="div" noValidate  sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -55,6 +67,9 @@ export default class RegisterPage extends Component {
                   id="firstName"
                   label="用户名"
                   autoFocus
+                  onChange={(e)=>{
+                    setAccount(e.target.value);
+                  }}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -65,6 +80,9 @@ export default class RegisterPage extends Component {
                   label="姓名"
                   name="lastName"
                   autoComplete="family-name"
+                  onChange={(e)=>{
+                    setName(e.target.value);
+                  }}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -75,6 +93,9 @@ export default class RegisterPage extends Component {
                   label="Email"
                   name="email"
                   autoComplete="email"
+                  onChange={(e)=>{
+                    setEmail(e.target.value);
+                  }}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -86,20 +107,18 @@ export default class RegisterPage extends Component {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  onChange={(e)=>{
+                    setPassword(e.target.value);
+                  }}
                 />
               </Grid>
-              {/* <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="I want to receive inspiration, marketing promotions and updates via email."
-                />
-              </Grid> */}
             </Grid>
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              onClick={handleRegister}
             >
               注册
             </Button>
@@ -117,4 +136,4 @@ export default class RegisterPage extends Component {
     </ThemeProvider>
   );
     }
-}
+// }

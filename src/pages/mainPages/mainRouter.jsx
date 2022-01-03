@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useState} from 'react'
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -33,18 +34,11 @@ const drawerWidth = 240;
 
 
 
-export default class MainRouter extends React.Component {
-    state = {
-      show: 0 ,
+export default function MainRouter(props) {
+    const navigate = useNavigate();
+    function logout(){
+      navigate('/loginPage');
     }
-    test = () =>{
-      alert('test');
-      // this.props.history.push('/loginPage');
-      console.log(this.props.history);
-      this.props.navigation('/loginPage');
-    }
-  render(){
-    // const container = window !== undefined ? () => window().document.body : undefined;
     const drawer = (
     <div>
         <Toolbar />
@@ -67,7 +61,7 @@ export default class MainRouter extends React.Component {
             </ListItemButton>
           </ListItem>
             <ListItem >
-              <ListItemButton component="a" onClick={this.test}>
+              <ListItemButton component="a" >
             <ListItemIcon>
               <BookIcon />
             </ListItemIcon>
@@ -82,19 +76,9 @@ export default class MainRouter extends React.Component {
             <ListItemText primary="标注界面" />
             </ListItemButton>
           </ListItem>
-        </List>
-        <Divider />
-        <List>
-          <ListItem button key="修改密码">
-           <ListItemButton component="a">
-            <ListItemIcon>
-              <ManageAccountsIcon />
-            </ListItemIcon>
-            <ListItemText primary="修改密码" />
-            </ListItemButton>
-          </ListItem>
+        
           <ListItem button key="退出登录" >
-            <ListItemButton component="a">
+            <ListItemButton component="a" onClick={logout}>
             <ListItemIcon>
               <Logout />
             </ListItemIcon>
@@ -162,7 +146,7 @@ export default class MainRouter extends React.Component {
       </Box>
       <Box
         component="main"
-        sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
+        sx={{ flexGrow: 2, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
       >
         <Toolbar />
 
@@ -172,4 +156,4 @@ export default class MainRouter extends React.Component {
     </Box>
   );
  }
-}
+// }

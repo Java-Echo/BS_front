@@ -4,19 +4,17 @@ import LoginPage from './loginPage';
 import RegisterPage from './registerPage';
 import MainRouter from '../mainPages/mainRouter';
 import 'tui-image-editor/dist/tui-image-editor.css'
-import ImageEditor from '@toast-ui/react-image-editor'
+import ImageEditor from '@toast-ui/react-image-editor';
+import Video from '../mainPages/uploadVideo';
+import Picture from '../mainPages/uploadPic';
 // import createBrowserHistory from 'history'
 // import PermanentDrawerLeft from '../Main/mainPage';
 export default class loginRouter extends Component{
     constructor(props){
         super(props);
         this.state = {
-            account : '',
-            password : '',
+            islogin: false
         }
-    }
-    state ={
-        islogin: false,
     }
     
     render(){
@@ -27,14 +25,8 @@ export default class loginRouter extends Component{
                <Route path="/loginPage" element={<LoginPage/>} />
                <Route path="/registerPage" element={<RegisterPage/>} />
                <Route path='/mainRouter' element={<MainRouter/>}>
-                   <Route poath='uploadVideo' element={
-                        <video
-                        controls = "controls"
-                        crossOrigin = "anonymous"
-                        width='1000'
-                        height='700'
-                        src = '../../video/test.mkv'/>}/>
-                    <Route index path='editPic' element={
+                   <Route path='uploadVideo' element={<Video/>}/>
+                    <Route  path='editPic' element={
                         <ImageEditor
                         includeUI={{
                         loadImage: {
@@ -53,12 +45,13 @@ export default class loginRouter extends Component{
                         cssMaxWidth={700}
                         selectionStyle={{
                         cornerSize: 20,
-                        rotatingPointOffset: 70
+                        rotatingPointOffset: 70,
+                        cornerColor: "blue",
                     }}
                     usageStatistics={true}
                     />}/>
                </Route>
-               <Route path="*" element={<Navigate to="/mainRouter" />}/> 
+               <Route path="*" element={<Navigate to="/loginPage" />}/> 
            </Routes>
             </BrowserRouter> 
         )
