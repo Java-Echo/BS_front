@@ -8,6 +8,7 @@ import ImageEditor from '@toast-ui/react-image-editor';
 import Video from '../mainPages/uploadVideo';
 import Picture from '../mainPages/uploadPic';
 import EditPic from '../mainPages/imageEditor';
+import EditCenter from '../mainPages/editCenter';
 // import createBrowserHistory from 'history'
 // import PermanentDrawerLeft from '../Main/mainPage';
 export default class loginRouter extends Component{
@@ -29,6 +30,7 @@ export default class loginRouter extends Component{
                    <Route path='uploadPic' element={<Picture/>} />
                    <Route path='uploadVideo' element={<Video/>}/>
                     <Route  path='editPic' element={<EditPic/>}/>
+                    <Route path='editCenter' element={<EditCenter/>}/>
                </Route>
                <Route path="*" element={<Navigate to="/loginPage" />}/> 
            </Routes>
