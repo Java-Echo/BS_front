@@ -45,11 +45,11 @@ export default function MainRouter(props) {
         <Divider />
         <List>
           <ListItem  >
-            <ListItemButton component="a">
+            <ListItemButton component="a" href="/mainRouter/uploadPic">
             <ListItemIcon>
               <InsertPhotoIcon />
             </ListItemIcon>
-            <ListItemText primary="上传图片" />
+            <ListItemText primary="我的图片" />
             </ListItemButton>
           </ListItem>
             <ListItem >
@@ -57,7 +57,7 @@ export default function MainRouter(props) {
             <ListItemIcon>
               <OndemandVideoIcon/>
             </ListItemIcon>
-            <ListItemText primary="上传视频" />
+            <ListItemText primary="我的视频" />
             </ListItemButton>
           </ListItem>
             <ListItem >
@@ -65,7 +65,7 @@ export default function MainRouter(props) {
             <ListItemIcon>
               <BookIcon />
             </ListItemIcon>
-            <ListItemText primary="我的标注" />
+            <ListItemText primary="我的任务" />
             </ListItemButton>
           </ListItem>
             <ListItem >
@@ -73,7 +73,7 @@ export default function MainRouter(props) {
             <ListItemIcon>
               <MailIcon />
             </ListItemIcon>
-            <ListItemText primary="标注界面" />
+            <ListItemText primary="标注中心" />
             </ListItemButton>
           </ListItem>
         

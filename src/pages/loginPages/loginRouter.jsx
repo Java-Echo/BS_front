@@ -7,6 +7,7 @@ import 'tui-image-editor/dist/tui-image-editor.css'
 import ImageEditor from '@toast-ui/react-image-editor';
 import Video from '../mainPages/uploadVideo';
 import Picture from '../mainPages/uploadPic';
+import EditPic from '../mainPages/imageEditor';
 // import createBrowserHistory from 'history'
 // import PermanentDrawerLeft from '../Main/mainPage';
 export default class loginRouter extends Component{
@@ -25,31 +26,9 @@ export default class loginRouter extends Component{
                <Route path="/loginPage" element={<LoginPage/>} />
                <Route path="/registerPage" element={<RegisterPage/>} />
                <Route path='/mainRouter' element={<MainRouter/>}>
+                   <Route path='uploadPic' element={<Picture/>} />
                    <Route path='uploadVideo' element={<Video/>}/>
-                    <Route  path='editPic' element={
-                        <ImageEditor
-                        includeUI={{
-                        loadImage: {
-                            path: 'img/sampleImage.jpg',
-                            name: 'SampleImage'
-                        },
-                        menu: ['shape', 'filter'],
-                        initMenu: 'filter',
-                        uiSize: {
-                            width: '1000px',
-                            height: '700px'
-                        },
-                        menuBarPosition: 'bottom'
-                        }}
-                        cssMaxHeight={500}
-                        cssMaxWidth={700}
-                        selectionStyle={{
-                        cornerSize: 20,
-                        rotatingPointOffset: 70,
-                        cornerColor: "blue",
-                    }}
-                    usageStatistics={true}
-                    />}/>
+                    <Route  path='editPic' element={<EditPic/>}/>
                </Route>
                <Route path="*" element={<Navigate to="/loginPage" />}/> 
            </Routes>

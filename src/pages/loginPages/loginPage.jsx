@@ -29,6 +29,8 @@ export default function LoginPage(props){
       alert('密码错误');
     } else{
       // alert('登录成功');
+      sessionStorage.setItem('id',account);
+      sessionStorage.setItem('passwd',password);
       navigate('/mainRouter');
     }
   }

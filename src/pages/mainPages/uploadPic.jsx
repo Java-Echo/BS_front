@@ -1,106 +1,72 @@
-// import { Upload, Modal } from 'antd';
-// import { PlusOutlined } from '@ant-design/icons';
-// import Component from 'React'
+import { List, Avatar, Space } from 'antd';
+import { MessageOutlined, LikeOutlined, StarOutlined } from '@ant-design/icons';
+import React, {Component} from 'react';
+import {Button,Image} from 'antd'
+import axios from 'axios'
+import ReactFileReader from 'react-file-reader';
 
 
-// function getBase64(file) {
-//   return new Promise((resolve, reject) => {
-//     const reader = new FileReader();
-//     reader.readAsDataURL(file);
-//     reader.onload = () => resolve(reader.result);
-//     reader.onerror = error => reject(error);
-//   });
-// }
-
-// export default class Picture extends Component {
-//   state = {
-//     previewVisible: false,
-//     previewImage: '',
-//     previewTitle: '',
-//     fileList: [
-//       {
-//         uid: '-1',
-//         name: 'image.png',
-//         status: 'done',
-//         url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-//       },
-//       {
-//         uid: '-2',
-//         name: 'image.png',
-//         status: 'done',
-//         url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-//       },
-//       {
-//         uid: '-3',
-//         name: 'image.png',
-//         status: 'done',
-//         url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-//       },
-//       {
-//         uid: '-4',
-//         name: 'image.png',
-//         status: 'done',
-//         url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-//       },
-//       {
-//         uid: '-xxx',
-//         percent: 50,
-//         name: 'image.png',
-//         status: 'uploading',
-//         url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-//       },
-//       {
-//         uid: '-5',
-//         name: 'image.png',
-//         status: 'error',
-//       },
-//     ],
-//   };
-
-//   handleCancel = () => this.setState({ previewVisible: false });
-
-//   handlePreview = async file => {
-//     if (!file.url && !file.preview) {
-//       file.preview = await getBase64(file.originFileObj);
-//     }
-
-//     this.setState({
-//       previewImage: file.url || file.preview,
-//       previewVisible: true,
-//       previewTitle: file.name || file.url.substring(file.url.lastIndexOf('/') + 1),
-//     });
-//   };
-
-//   handleChange = ({ fileList }) => this.setState({ fileList });
-
-//   render() {
-//     const { previewVisible, previewImage, fileList, previewTitle } = this.state;
-//     const uploadButton = (
-//       <div>
-//         <PlusOutlined />
-//         <div style={{ marginTop: 8 }}>Upload</div>
-//       </div>
-//     );
-//     return (
-//       <>
-//         <Upload
-//           action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-//           listType="picture-card"
-//           fileList={fileList}
-//           onPreview={this.handlePreview}
-//           onChange={this.handleChange}
-//         >
-//           {fileList.length >= 8 ? null : uploadButton}
-//         </Upload>
-//         <Modal
-//           visible={previewVisible}
-//           title={previewTitle}
-//           footer={null}
-//           onCancel={this.handleCancel}
-//         >
-//           <img alt="example" style={{ width: '100%' }} src={previewImage} />
-//         </Modal>
-//       </>
-//     );
-//   }
-// }
+export default function Picture(props){
+   const [list,setList] = React.useState([]);
+   const itemid = sessionStorage.getItem('id');
+   React.useEffect(()=>{
+     const fn = async ()=>{
+      const data = await axios.post('http://localhost:8080/getPicture?id='+itemid);
+      setList(data.data)
+     }
+      fn()
+      console.log(list)
+   },[])
+ 
+     async function handleFiles(files){
+        // console.log(sessionStorage.getItem('id'));
+        console.log(files)
+        console.log(files.fileList[0].name)
+        var str = files.base64.replace(/;/g, '%3B');
+        const ret =  axios.post("http://localhost:8080/uploadPicture?id="+itemid+"&name="+files.fileList[0].name+"&data="+encodeURI(str))
+    }
+    // render(){
+      
+        return(
+            <List
+              itemLayout="vertical"
+              size="large"
+              pagination={{
+                onChange: page => {
+                  console.log(page);
+                },
+                pageSize: 3,
+              }}
+              dataSource={list}
+              footer={
+                <ReactFileReader
+                  fileTypes={[".png",".jpg",".gif", "jpeg"]}
+                  base64
+                  
+                  multipleFiles={!1}
+                  handleFiles={handleFiles}>
+                  <Button >上传图片</Button>
+              </ReactFileReader>
+              }
+              renderItem={item => (
+                <List.Item
+                actions={[<Button>发布任务</Button>]}
+                extra={
+                  <Image
+                    width={272}
+                    alt="logo"
+                    src={item.data}
+                  />
+                }
+              >
+                <List.Item.Meta
+                  avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
+                  title={<div>{itemid}</div>}
+                  description={<div >{item.name}</div>}
+                />
+              </List.Item>
+            )}
+  />
+        )
+    // }
+}
