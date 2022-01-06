@@ -1,4 +1,4 @@
-import { List, Avatar, Space } from 'antd';
+import { List, Avatar, Space,Row,Col} from 'antd';
 import { MessageOutlined, LikeOutlined, StarOutlined } from '@ant-design/icons';
 import React, {Component} from 'react';
 import {Button,Image,Input} from 'antd'
@@ -32,6 +32,13 @@ export default function Picture(props){
    React.useEffect(()=>{
      const fn = async ()=>{
       const data = await axios.post('http://localhost:8080/getPicture?id='+itemid);
+      for(let key in data.data){
+        // key = key.data.replace(/%3B/g, ';');
+        // console.log(data.data[key].id)
+        data.data[key].data = data.data[key].data.replace('%3B',';');
+        // data.data[key].data = decodeURI(data.data[key].data)
+      }
+      // console.log(data.data[0].data)
       setList(data.data)
      }
       fn()
@@ -40,11 +47,12 @@ export default function Picture(props){
  
      async function handleFiles(files){
         // console.log(sessionStorage.getItem('id'));
-        console.log(files)
+        console.log(files.base64)
         console.log(files.fileList[0].name)
-        var str = files.base64.replace(/;/g, '%3B');
+        var str = files.base64.replace(';', '%3B');
         const ret =  axios.post("http://localhost:8080/uploadPicture?id="+itemid+"&name="+files.fileList[0].name+"&data="+encodeURI(str))
     }
+
     // render(){
       
         return(
@@ -73,15 +81,20 @@ export default function Picture(props){
                 <List.Item
                
                 extra={
-                  <><Image
-                    width={272}
+                  <>
+                  <Row justify='center' align='middle'>
+                    <Col>
+                    <Image
+                    width={150}
                     alt="logo"
-                    src={item.data} />
-                    <Button onClick={() =>{
+                    src={item.data} /></Col>
+                    <Col><Button onClick={() =>{
                       setVisible(true);
                       setFile(item.data);
                       setFileName(item.name);
-                    }}>发布任务</Button>
+                    }}>发布任务</Button></Col>
+                    </Row>
+                    
                     
                     </>
                 }

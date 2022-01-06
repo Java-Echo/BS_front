@@ -61,7 +61,7 @@ export default function MainRouter(props) {
             </ListItemButton>
           </ListItem>
             <ListItem >
-              <ListItemButton component="a" >
+              <ListItemButton component="a" href="/mainRouter/editUser">
             <ListItemIcon>
               <BookIcon />
             </ListItemIcon>
@@ -69,7 +69,7 @@ export default function MainRouter(props) {
             </ListItemButton>
           </ListItem>
             <ListItem >
-              <ListItemButton component="a" href="/mainRouter/editPic">
+              <ListItemButton component="a" href="/mainRouter/editCenter">
             <ListItemIcon>
               <MailIcon />
             </ListItemIcon>

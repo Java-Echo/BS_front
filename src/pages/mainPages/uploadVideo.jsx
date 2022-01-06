@@ -1,78 +1,78 @@
-import Button from '@mui/material/Button';
-import {Row,Col} from 'antd'
+import { List, Avatar, Space } from 'antd';
+import { MessageOutlined, LikeOutlined, StarOutlined } from '@ant-design/icons';
+import React, {Component} from 'react';
+import {Button,Image,Input} from 'antd'
+import axios from 'axios'
 import ReactFileReader from 'react-file-reader';
-import React from 'react';
-import axios from 'axios';
-import { List, Typography, Divider } from 'antd';
+import { Modal} from 'antd';
 
-
-export default function Video(){
-  const [file,setFile] = React.useState("");
-  const data = [
-    'Racing car sprays burning fuel into crowd.',
-    'Japanese princess to wed commoner.',
-    'Australian walks 100km after outback crash.',
-    'Man charged over missing wedding girl.',
-    'Los Angeles battles huge wildfires.',
-  ];
-    // const[data,setData] = React.useState(null)
-    async function getImage() {
-        console.log('getImage');
-        var video = document.getElementsByTagName('video')[0];
-        video.crossOrigin = 'anonymous'
-        var canvas = document.getElementById('canvas');
-        var cobj = canvas.getContext('2d'); //获取绘图环境
-        cobj.drawImage(video, 0, 0, 200, 300);
-        let base64 = canvas.toDataURL('image/jpeg', 0.5)
-        // console.log(base64)
-        
-      }
-      async function handleFiles(files){
-        console.log("data="+encodeURI(files.base64));
+export default function Picture(props){
+   const [list,setList] = React.useState([]);
+   const itemid = sessionStorage.getItem('id');
+   const [fileName,setFileName] = React.useState('');
+ 
+   React.useEffect(()=>{
+     const fn = async ()=>{
+      const data = await axios.post('http://localhost:8080/getVideo?id='+itemid);
+      console.log(data)
+      setList(data.data)
+     }
+      fn()
+      console.log(list)
+   },[])
+ 
+     async function handleFiles(files){
         // console.log(sessionStorage.getItem('id'));
-        
+        console.log(files.base64)
+        console.log(files.fileList[0].name)
         var str = files.base64.replace(/;/g, '%3B');
-        const {data} = await axios.post("http://localhost:8080/uploadPicture?id=test&name=test1&data="+encodeURI(str))
-      }
+        const ret =  axios.post("http://localhost:8080/uploadVideo?id="+itemid+"&name="+files.fileList[0].name+"&data="+encodeURI(str))
+    }
+    // render(){
+      
         return(
-          <Col>
-          <Row type="flex" justify="center" align="middle" style={{minHeight:'0vh'}}> 
-          
-          <Col><video
-            controls = "controls"
-            crossOrigin = "anonymous"
-            width='600'
-            height='400'>
-          <source src={file}  type="video/mp4"/>
-        </video></Col>
-        <Col><Button type="primary" onClick = {getImage}>点击截图</Button></Col>
-        <canvas id="canvas" width = "200" height = "300"   ></canvas>
-        </Row>
-        <Row justify='center' align='middle'>
+          <>
+            <List
+              itemLayout="vertical"
+              size="large"
+              pagination={{
+                onChange: page => {
+                  console.log(page);
+                },
+                pageSize: 5,
+              }}
+              dataSource={list}
+              footer={
+                <ReactFileReader
+                  fileTypes={[".mp4"]}
+                  base64
+                  multipleFiles={!1}
+                  handleFiles={handleFiles}>
+                  <Button >上传视频</Button>
+              </ReactFileReader>
+              }
+              renderItem={item => (
+                <List.Item
+               
+                extra={
+                  <>
+                    <Button onClick={() =>{
+                      console.log('ddd');
+                    }}>开始截图</Button>
+                    
+                    </>
+                }
+              >
+                <List.Item.Meta
+                  avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
+                  title={<div>{itemid}</div>}
+                  // description={<div >{item.name}</div>}
+                />
+              </List.Item>
+            )}
+        /> 
         
-        </Row>
-        <Row>
-           <ReactFileReader
-         fileTypes={[".mp4",".jpg",".gif", "jpeg"]}
-         base64
-         
-         multipleFiles={!1}
-         handleFiles={handleFiles}>
-         <Button >截图列表</Button>
-      </ReactFileReader>
-        </Row>
-        <Row>
-        <List
-      size="large"
-      header={<div>Header</div>}
-      footer={<div>Footer</div>}
-      bordered
-      dataSource={data}
-      renderItem={item => <List.Item>{item}</List.Item>}
-    />
-        </Row>
-        </Col>
-        
-          
+        </>
         )
+    // }
 }

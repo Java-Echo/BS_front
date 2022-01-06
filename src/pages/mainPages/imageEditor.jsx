@@ -79,7 +79,13 @@ var customTheme = {
     "colorpicker.title.color": "#fff",
   };
 export default class EditPic extends Component{
-    
+    constructor(props){
+        super(props)
+        this.setState({
+            file: props.file,
+            filename: props.name,
+        })
+    }
     // var whiteTheme = require('./js/theme/white-theme.js');
     render(){
         return(

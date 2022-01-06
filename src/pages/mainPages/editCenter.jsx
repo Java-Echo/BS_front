@@ -1,13 +1,17 @@
-import { List, Avatar, Space } from 'antd';
+import { List, Avatar, Space,Row,Col } from 'antd';
 import React from 'react';
-import {Button,Image,} from 'antd'
+import {Button,Image,Drawer} from 'antd'
 import axios from 'axios'
-
+import EditPic from './editPic'
 export default function EditCenter(props){
    const [list,setList] = React.useState([]);
    const itemid = sessionStorage.getItem('id');
- 
- 
+   const [visible,setVisible] = React.useState(false);
+   var data = ""
+   var name = ""
+  function onClose()  {
+    setVisible(false);
+  };
    React.useEffect(()=>{
      const fn = async ()=>{
       const data = await axios.get('http://localhost:8080/getTasks');
@@ -16,14 +20,14 @@ export default function EditCenter(props){
       console.log(list)
      }
       fn()
+      console.log(itemid)
    },[])
- 
      
     // render(){
       
         return(
           <>
-            {/* <List
+            <List
               itemLayout="vertical"
               size="large"
               pagination={{
@@ -37,25 +41,36 @@ export default function EditCenter(props){
                 <List.Item
                
                 extra={
-                  <><Image
-                    width={272}
+                  <>
+                  <Row justify='center' align='middle'>
+                      <Col><Image
+                    width={150}
                     alt="logo"
-                    src={item.data} />
-                    <Button onClick={() =>{
-                        console.log('dd')
-                    }}>发布任务</Button>
-                    
+                    src={item.data} /></Col>
+                      <Col><Button onClick={async() =>{
+                        data = item.data
+                        name = item.name
+                        setVisible(true)
+                        console.log(data)
+                        
+                        console.log(name)
+                    }}>开始标注</Button></Col>
+                  </Row>
+               
                     </>
                 }
               >
                 <List.Item.Meta
                   avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
-                  title={<div>{itemid}</div>}
+                  title={<div>发布人id:{item.id}</div>}
                   description={<div >{item.name}</div>}
                 />
               </List.Item>
             )}
-        />   */}
+        /> 
+        <Drawer title="Basic Drawer" placement="right" width={1300} onClose={onClose} visible={visible}>
+        <EditPic file={data} name={name}/>
+      </Drawer> 
         </>
         )
     // }
